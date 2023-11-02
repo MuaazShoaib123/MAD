@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-#name : muaazshoaib
-# password : muaaz.shoaib
+
 class UserProfileScreen extends StatelessWidget {
   final String name;
   final String introduction;

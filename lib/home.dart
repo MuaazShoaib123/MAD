@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz2/home2.dart';
 
-# name : muaaz shoaib
-# password : muaaz.shoaib
 class PasswordResetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

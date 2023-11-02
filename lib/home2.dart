@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz2/home3.dart';
 
-# name : muaaz shoaib
-# password : muaaz.shoaib
 class AccountScreen extends StatelessWidget {
   // List of friends' names and emails (you can replace this with your actual data)
   final List<Map<String, String?>> friends = [
@@ -14,8 +12,7 @@ class AccountScreen extends StatelessWidget {
     {'name': 'Umar Ghous', 'email': 'umar@gmail.com'},
     {'name': 'Hafiz Yasir', 'email': 'h.yasir@gmail.com'},
     {'name': 'Hussnain Choudary', 'email': 'h.c@gmail.com'},
-    {'name': 'Abbas', 'email': 'abbas@gmail.com'},
-    {'name': 'Abdul Mateen', 'email': 'abd_m@gmail.com'},
+
     // Add more friends as needed
   ];
 
