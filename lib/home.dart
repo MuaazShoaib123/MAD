@@ -1,7 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:quiz2/home2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'home2.dart';
+import 'home3.dart';// Import your SignupScreen widget
 
 class PasswordResetScreen extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> signIn(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // If sign in is successful, you can navigate to the next screen or perform other actions
+      print("User signed in: ${userCredential.user?.uid}");
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        ),
+      );
+    } catch (e) {
+      // Handle sign-in errors
+      print("Error signing in: $e");
+      // You can show an error message to the user if needed
+    }
+  }
+
+  void navigateToSignUp(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AccountScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,12 +60,11 @@ class PasswordResetScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Center the row contents
                     Text(
                       'Sign In',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold, // Make it bold
+                        fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
@@ -75,8 +110,9 @@ class PasswordResetScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'muaazshoaib@yahoo.com',
+                      labelText: 'Enter your email',
                       labelStyle: TextStyle(color: Colors.black),
                       border: InputBorder.none,
                     ),
@@ -109,12 +145,14 @@ class PasswordResetScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextField(
+                    controller: passwordController,
                     decoration: InputDecoration(
-                      labelText: 'Muaaz Shoaib',
+                      labelText: 'Enter your password',
                       labelStyle: TextStyle(color: Colors.black),
                       border: InputBorder.none,
                     ),
                     style: TextStyle(color: Colors.black),
+                    obscureText: true,
                   ),
                 ),
                 SizedBox(height: 32),
@@ -122,11 +160,7 @@ class PasswordResetScreen extends StatelessWidget {
                   width: 400,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to the home.dart screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AccountScreen()),
-                      );
+                      signIn(context);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
@@ -135,25 +169,35 @@ class PasswordResetScreen extends StatelessWidget {
                       'Sign In',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold, // Make it bold
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
                 SizedBox(height: 8),
-                Text(
-                  'Forgot your password?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    navigateToSignUp(context);
+                  },
+                  child: Text(
+                    'Forgot your password?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 SizedBox(width: 6),
-                Text(
-                  ' Try email.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue,
+                GestureDetector(
+                  onTap: () {
+                    navigateToSignUp(context);
+                  },
+                  child: Text(
+                    ' Sign Up.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
                   ),
                 ),
               ],

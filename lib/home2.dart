@@ -1,98 +1,188 @@
 import 'package:flutter/material.dart';
-import 'package:quiz2/home3.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AccountScreen extends StatelessWidget {
-  // List of friends' names and emails (you can replace this with your actual data)
-  final List<Map<String, String?>> friends = [
-    {'name': 'Abdullah Mazher', 'email': 'abd@yahoo.com'},
-    {'name': 'Syed Fraz', 'email': 'syedfraz@gmail.com'},
-    {'name': 'Ali Akbar', 'email': 'akbar.ali@gmail.com'},
-    {'name': 'Saad Haider', 'email': 'saad@gmail.com'},
-    {'name': 'Aftab Ali', 'email': 'aftab@gmail.com'},
-    {'name': 'Umar Ghous', 'email': 'umar@gmail.com'},
-    {'name': 'Hafiz Yasir', 'email': 'h.yasir@gmail.com'},
-    {'name': 'Hussnain Choudary', 'email': 'h.c@gmail.com'},
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-    // Add more friends as needed
-  ];
+  Future<void> signUp(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // If signup is successful, you can navigate to the next screen or perform other actions
+      print("User signed up: ${userCredential.user?.uid}");
+
+      // You can navigate to another screen or perform other actions
+      // Example:
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => AnotherScreen()),
+      // );
+    } catch (e) {
+      // Handle signup errors
+      print("Error signing up: $e");
+      // You can show an error message to the user if needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Friends'),
+        title: Text(' Food Ordering Sign Up Screen'),
       ),
-      body: Column(
-        children: friends.map((friend) {
-          return FriendListItem(friend: friend);
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class FriendListItem extends StatefulWidget {
-  final Map<String, String?> friend;
-
-  FriendListItem({required this.friend});
-
-  @override
-  _FriendListItemState createState() => _FriendListItemState();
-}
-
-class _FriendListItemState extends State<FriendListItem> {
-  bool isTapped = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isTapped = true;
-        });
-
-        Future.delayed(Duration(milliseconds: 500), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserProfileScreen(
-                name: widget.friend['name'] ?? '',
-                introduction: 'Hi i am a professional flutter developer. Hire me for your Project...!',
-                followers: 1000, // Replace with the actual number of followers
-                following: 2000, // Replace with the actual number of following
-                isFollowing: true, // Replace with the actual following status
-              ),
-            ),
-          );
-        });
-      },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isTapped ? Colors.red : Colors.transparent,
+      body: Center(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
           ),
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.account_circle,
-            size: 40,
-            color: Colors.blue,
-          ),
-          title: Text(widget.friend['name'] ?? ''),
-          subtitle: Text(
-            widget.friend['email'] ?? '',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
-          trailing: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            transform: Matrix4.rotationZ(isTapped ? 3.1415926 : 0),
-            child: Icon(
-              Icons.arrow_forward,
-              color: Colors.red,
+          child: Container(
+            width: 400,
+            height: 400,
+            color: Colors.white,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.security,
+                      size: 30,
+                      color: Colors.yellow,
+                    ),
+                    SizedBox(width: 200),
+                    Icon(
+                      Icons.cancel,
+                      size: 20,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 50),
+                SizedBox(height: 8),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text(
+                      'Email',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.star,
+                      size: 10,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 400,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter your email',
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: InputBorder.none,
+                    ),
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.star,
+                      size: 10,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 400,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter your password',
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: InputBorder.none,
+                    ),
+                    style: TextStyle(color: Colors.black),
+                    obscureText: true,
+                  ),
+                ),
+                SizedBox(height: 32),
+                Container(
+                  width: 400,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      signUp(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                    ),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Already have an account?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(width: 6),
+                Text(
+                  ' Sign In.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
